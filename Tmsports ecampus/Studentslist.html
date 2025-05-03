@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCampus for School - Students List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #dfe4ea);
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #007bff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page Title */
+        h2 {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 123, 255, 0.4);
+        }
+
+        /* Student Card Styling */
+        .student-card {
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .student-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Search Box */
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TM Sports Academy ecampus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="grades.html">Grades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="assignments.html">Assignments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="teachers.html">Teachers</a></li>
+                   
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Students List Page -->
+    <section id="students" class="container mt-5">
+        <h2>Students List</h2>
+        <p class="text-center">Browse the list of students below.</p>
+
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" class="form-control search-box" placeholder="Search by name or roll number..." onkeyup="filterStudents()">
+
+        <div class="row mt-4" id="studentList">
+            <!-- Student 1 -->
+            <div class="col-md-4 student-item">
+                <div class="card student-card p-3 mb-4">
+                    <h4 class="card-title">Murugan</h4>
+                    <p><strong>Roll No:</strong> 101</p>
+                    <p><strong>Grade:</strong> A</p>
+                </div>
+            </div>
+
+            <!-- Student 2 -->
+            <div class="col-md-4 student-item">
+                <div class="card student-card p-3 mb-4">
+                    <h4 class="card-title">Anbu</h4>
+                    <p><strong>Roll No:</strong> 102</p>
+                    <p><strong>Grade:</strong> B+</p>
+                </div>
+            </div>
+
+            <!-- Student 3 -->
+            <div class="col-md-4 student-item">
+                <div class="card student-card p-3 mb-4">
+                    <h4 class="card-title">Kowshika</h4>
+                    <p><strong>Roll No:</strong> 103</p>
+                    <p><strong>Grade:</strong> A-</p>
+                </div>
+            </div>
+
+            <!-- Student 4 -->
+            <div class="col-md-4 student-item">
+                <div class="card student-card p-3 mb-4">
+                    <h4 class="card-title">Subaramani</h4>
+                    <p><strong>Roll No:</strong> 104</p>
+                    <p><strong>Grade:</strong> B</p>
+                </div>
+            </div>
+
+            <!-- Student 5 -->
+            <div class="col-md-4 student-item">
+                <div class="card student-card p-3 mb-4">
+                    <h4 class="card-title">Priya</h4>
+                    <p><strong>Roll No:</strong> 105</p>
+                    <p><strong>Grade:</strong> A</p>
+                </div>
+            </div>
+
+            <!-- Student 6 -->
+            <div class="col-md-4 student-item">
+                <div class="card student-card p-3 mb-4">
+                    <h4 class="card-title">Vikram</h4>
+                    <p><strong>Roll No:</strong> 106</p>
+                    <p><strong>Grade:</strong> C+</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for Search Functionality -->
+    <script>
+        function filterStudents() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let students = document.querySelectorAll('.student-item');
+
+            students.forEach(student => {
+                let name = student.querySelector('.card-title').textContent.toLowerCase();
+                let rollNo = student.querySelector('p').textContent.toLowerCase();
+
+                if (name.includes(input) || rollNo.includes(input)) {
+                    student.style.display = "block";
+                } else {
+                    student.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

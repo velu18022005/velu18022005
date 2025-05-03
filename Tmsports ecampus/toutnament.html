@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Email Registration</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        /* Centered Form Container */
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        /* Input Fields */
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Submit Button */
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        /* Hover Effect */
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>TM Sports Academy Registration</h2>
+        <form id="registrationForm">
+            <input type="text" id="user_name" placeholder="Your Name" required><br>
+            <input type="email" id="user_email" placeholder="Your Email" required><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        (function() {
+            emailjs.init("yXqtq1H80XK2yrFem");  
+        })();
+
+        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+            event.preventDefault(); 
+
+            const templateParams = {
+                user_name: document.getElementById("user_name").value,
+                user_email: document.getElementById("user_email").value, 
+                registration_number: "TNR" + Math.floor(Math.random() * 10000) 
+            };
+
+            console.log("Sending Email with Params:", templateParams); 
+
+            emailjs.send("service_zbjqiah", "template_s6u01v9", templateParams)
+                .then(response => {
+                    alert("Registration successful! Check your email.");
+                    console.log("SUCCESS!", response.status, response.text);
+                }, error => {
+                    alert("Failed to send email. Check the console.");
+                    console.error("FAILED...", error);
+                });
+        });
+    </script>
+
+</body>
+</html>

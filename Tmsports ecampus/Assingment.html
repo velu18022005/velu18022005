@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCampus for School - Assignment Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TM Sports Academy ecampus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="students.html">Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="teachers.html">Teachers</a></li>
+                   
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Assignment Page Section -->
+    <section id="assignments" class="container mt-5">
+        <h2>Assignments</h2>
+        <p>View and submit your assignments below.</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card p-3 mb-3">
+                    <h4>Silambam Assignment</h4>
+                    <p>Due Date: March 10, 2025</p>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-3 mb-3">
+                    <h4>Karate Assignment</h4>
+                    <p>Due Date: March 15, 2025</p>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+            </div>
+        </div>
+        <h3 class="mt-4">Submit Your Assignment</h3>
+        <form id="assignmentForm">
+            <div class="mb-3">
+                <label for="assignmentFile" class="form-label">Upload File</label>
+                <input class="form-control" type="file" id="assignmentFile" required>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <div class="mt-4">
+            <h4>Submitted Files:</h4>
+            <ul id="fileList" class="list-group"></ul>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById("assignmentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let fileInput = document.getElementById("assignmentFile");
+            if (fileInput.files.length > 0) {
+                let file = fileInput.files[0];
+                let fileList = document.getElementById("fileList");
+                
+                let listItem = document.createElement("li");
+                listItem.className = "list-group-item";
+                listItem.textContent = file.name;
+                
+                fileList.appendChild(listItem);
+                fileInput.value = ""; // Clear file input after submission
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

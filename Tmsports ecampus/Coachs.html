@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCampus - Coaches</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .card {
+            transition: transform 0.5s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        .card:hover {
+            transform: scale(1.05) rotateY(10deg);
+        }
+        .card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TM Sports Academy ecampus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="./index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Student.html">Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Grades.html">Grades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Assingment.html">Assignments</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="container mt-5">
+        <h2 class="text-center mb-4">Meet Our Coaches</h2>
+        <div class="row">
+            <!-- Coach Profiles -->
+            <div class="col-md-4 mb-4" id="coach-template">
+                <div class="card p-3 text-center">
+                    <img src="./assert/Master photo.jpg" alt="Coach Profile">
+                    <h4 class="mt-3">Thennarasu</h4>
+                    <p>Expert in Physical Training</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center">
+                    <img src="https://via.placeholder.com/100" alt="Coach Profile">
+                    <h4 class="mt-3">Kowshika</h4>
+                    <p>Basketball & Fitness Coach</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center">
+                    <img src="https://via.placeholder.com/100" alt="Coach Profile">
+                    <h4 class="mt-3">Anbu</h4>
+                    <p>Martial Arts Specialist</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center">
+                    <img src="https://via.placeholder.com/100" alt="Coach Profile">
+                    <h4 class="mt-3">Subramani</h4>
+                    <p>Soccer Coach</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center">
+                    <img src="https://via.placeholder.com/100" alt="Coach Profile">
+                    <h4 class="mt-3">Murugan</h4>
+                    <p>Cricket & Strength Training</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center">
+                    <img src="https://via.placeholder.com/100" alt="Coach Profile">
+                    <h4 class="mt-3">Velmurugan</h4>
+                    <p>Tennis & Conditioning</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

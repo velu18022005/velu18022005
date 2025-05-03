@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Attendance System</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.min.js"></script>
+
+</head>
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            padding: 20px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            margin: auto;
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+            transition: transform 0.5s, box-shadow 0.3s;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .container:hover {
+            transform: perspective(1000px) rotateY(10deg) rotateX(5deg);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 12px rgba(52, 152, 219, 0.8);
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #2980b9, #1c2833);
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 0 15px rgba(41, 128, 185, 0.8);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(41, 128, 185, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        button:hover::after {
+            opacity: 1;
+        }
+
+        #scannedData {
+            font-weight: bold;
+            color: #27ae60;
+            margin-top: 15px;
+            font-size: 18px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+    <h2>QR Code Attendance System</h2>
+    
+    <input type="file" id="qrInput" accept="image/*">
+    <button onclick="scanQRCode()">Scan & Submit</button>
+
+    <h3>Scanned Data:</h3>
+    <p id="scannedData">No data scanned yet.</p>
+
+    <script>
+        function scanQRCode() {
+            const fileInput = document.getElementById('qrInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please upload a QR code image.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0, img.width, img.height);
+
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const qrCodeData = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (qrCodeData) {
+                        document.getElementById("scannedData").innerText = qrCodeData.data; // Display data
+                        sendToGoogleSheet(qrCodeData.data);
+                    } else {
+                        alert("QR Code not detected. Please try again.");
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+       
+        function sendToGoogleSheet(qrData) {
+    const timestamp = new Date().toLocaleString();
+    const data = { qrData, timestamp };
+
+    fetch("https://script.google.com/macros/s/AKfycbwX-Q-Yd8U-8HyUSbh7w-0VnKztgrhr6ikh2ihnEJy6xBh18lHon3fngJ1XdoF7F2fN-A/exec", {  // ✅ Replace with the correct URL
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        mode: "no-cors"  // ✅ Fix CORS issue
+    })
+    .then(response => {
+        console.log("Server Response:", response);
+        alert("✅ Attendance recorded! (Check Google Sheet)");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("❌ Failed to save attendance! Check Console.");
+    });
+}
+
+    </script>
+</body>
+</html>

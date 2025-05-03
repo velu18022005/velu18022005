@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCampus - Achievements</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        #achievements {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+        }
+
+        .text-muted {
+            font-size: 1.2rem;
+            color: #ddd !important;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .achievement-card {
+            width: 100%;
+            height: 250px;
+            background: transparent;
+            border-radius: 1.5rem;
+            position: relative;
+            transition: transform 1s;
+            transform-style: preserve-3d;
+            border: 2px solid rgba(255, 255, 0, 0.7);
+            box-shadow: 0px 0px 20px rgba(255, 255, 0, 0.5);
+        }
+
+        .achievement-card:hover {
+            cursor: pointer;
+            transform: rotateY(180deg);
+        }
+
+        .front, .back {
+            height: 100%;
+            width: 100%;
+            border-radius: 1.5rem;
+            box-shadow: 0px 0px 10px 5px rgba(255, 255, 0, 0.7);
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .back {
+            transform: rotateY(180deg);
+        }
+
+        .achievement-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <section id="achievements" class="container mt-5">
+        <h2 class="mb-4">Achievements</h2>
+        <p class="text-muted">Recognizing outstanding student achievements.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4">
+                <div class="card-container">
+                    <div class="achievement-card">
+                        <div class="front">
+                            <img src="./assert/Murugan photo.jpg" alt="Murugan Achievement">
+                            <h5 class="card-title">Murugan</h5>
+                            <p class="card-text">Won 1st place in the International compatition in Single stick </p>
+                        </div>
+                        <div class="back">
+                            <h5 class="card-title">Murugan</h5>
+                            <p class="card-text">International Silambam Champian 🏆</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card-container">
+                    <div class="achievement-card">
+                        <div class="front">
+                            <img src="https://via.placeholder.com/100" alt="Anbu Achievement">
+                            <h5 class="card-title">Anbu</h5>
+                            <p class="card-text">Won 1st place in the International compatition in Double surul </p>
+                        </div>
+                        <div class="back">
+                            <h5 class="card-title">Anbu</h5>
+                            <p class="card-text">International Silambam Champian 🏆</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card-container">
+                    <div class="achievement-card">
+                        <div class="front">
+                            <img src="./assert/Kowshika photo.jpg" alt="Kowshika Achievement">
+                            <h5 class="card-title">Kowshika</h5>
+                            <p class="card-text">Won 1st place in the International compatition in Single stick </p>
+                        </div>
+                        <div class="back">
+                            <h5 class="card-title">Kowshika</h5>
+                            <p class="card-text">International Silambam Champian 🏆</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

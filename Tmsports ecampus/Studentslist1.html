@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - TM Sports Academy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, onSnapshot, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdWRFF-vx-nyf76__0o6RI7Ht2xAVvjIY",
+            authDomain: "tmsports-c2412.firebaseapp.com",
+            projectId: "tmsports-c2412",
+            storageBucket: "tmsports-c2412.appspot.com",
+            messagingSenderId: "932200744193",
+            appId: "1:932200744193:web:04aa5a7955ea93d11b0700"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function addStudent() {
+            let name = document.getElementById("studentName").value;
+            let sport = document.getElementById("studentSport").value;
+            let grade = document.getElementById("studentGrade").value;
+            let progress = document.getElementById("studentProgress").value;
+            let totalClasses = document.getElementById("totalClasses").value;
+            let attendedClasses = document.getElementById("attendedClasses").value;
+            let attendance = (attendedClasses / totalClasses) * 100 || 0;
+
+            if (!name || !sport || !grade || !progress || !totalClasses || !attendedClasses) {
+                alert("Please enter all details.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "students"), { name, sport, grade, progress, totalClasses, attendedClasses, attendance });
+                alert("Student added successfully!");
+                document.getElementById("studentName").value = "";
+                document.getElementById("studentSport").value = "";
+                document.getElementById("studentGrade").value = "";
+                document.getElementById("studentProgress").value = "";
+                document.getElementById("totalClasses").value = "";
+                document.getElementById("attendedClasses").value = "";
+            } catch (error) {
+                console.error("Error adding student: ", error);
+                alert("Failed to add student.");
+            }
+        }
+
+        function fetchStudents() {
+            const studentTableBody = document.getElementById("studentTableBody");
+            onSnapshot(collection(db, "students"), (snapshot) => {
+                studentTableBody.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    let student = { id: doc.id, ...doc.data() };
+                    let row = `
+                        <tr>
+                            <td>${student.id}</td>
+                            <td contenteditable="true" onBlur="updateStudent('${student.id}', 'name', this.innerText)">${student.name}</td>
+                            <td contenteditable="true" onBlur="updateStudent('${student.id}', 'sport', this.innerText)">${student.sport}</td>
+                            <td contenteditable="true" onBlur="updateStudent('${student.id}', 'grade', this.innerText)">${student.grade}</td>
+                            <td contenteditable="true" onBlur="updateStudent('${student.id}', 'progress', this.innerText)">${student.progress}%</td>
+                            <td contenteditable="true" onBlur="updateStudent('${student.id}', 'totalClasses', this.innerText)">${student.totalClasses}</td>
+                            <td contenteditable="true" onBlur="updateStudent('${student.id}', 'attendedClasses', this.innerText)">${student.attendedClasses}</td>
+                            <td id="attendance-${student.id}">${student.attendance.toFixed(2)}%</td>
+                            <td><button class='btn btn-danger' onclick='deleteStudent("${student.id}")'>Delete</button></td>
+                        </tr>`;
+                    studentTableBody.innerHTML += row;
+                });
+            });
+        }
+
+        async function updateStudent(id, field, value) {
+            try {
+                const studentRef = doc(db, "students", id);
+                await updateDoc(studentRef, { [field]: value });
+                
+                if (field === "totalClasses" || field === "attendedClasses") {
+                    const docSnap = await getDoc(studentRef);
+                    if (docSnap.exists()) {
+                        const studentData = docSnap.data();
+                        let attendance = (studentData.attendedClasses / studentData.totalClasses) * 100 || 0;
+                        await updateDoc(studentRef, { attendance });
+                        document.getElementById(`attendance-${id}`).innerText = `${attendance.toFixed(2)}%`;
+                    }
+                }
+                fetchStudents();
+            } catch (error) {
+                console.error("Error updating student: ", error);
+            }
+        }
+
+        window.addStudent = addStudent;
+        window.deleteStudent = deleteStudent;
+        window.updateStudent = updateStudent;
+        window.onload = fetchStudents;
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Admin Panel - TM Sports Academy</a>
+        </div>
+    </nav>
+    <section class="container mt-4">
+        <div class="row mt-3">
+            <div class="col-md-2"><input type="text" id="studentName" class="form-control" placeholder="Name"></div>
+            <div class="col-md-2"><input type="text" id="studentSport" class="form-control" placeholder="Sport"></div>
+            <div class="col-md-2"><input type="text" id="studentGrade" class="form-control" placeholder="Grade"></div>
+            <div class="col-md-2"><input type="number" id="studentProgress" class="form-control" placeholder="Progress %"></div>
+            <div class="col-md-2"><input type="number" id="totalClasses" class="form-control" placeholder="Total Classes"></div>
+            <div class="col-md-2"><input type="number" id="attendedClasses" class="form-control" placeholder="Attended Classes"></div>
+            <div class="col-md-2"><button class="btn btn-primary" onclick="addStudent()">Add</button></div>
+        </div>
+        <table class="table table-bordered mt-3">
+            <thead><tr><th>ID</th><th>Name</th><th>Sport</th><th>Grade</th><th>Progress</th><th>Total Classes</th><th>Attended Classes</th><th>Attendance %</th><th>Actions</th></tr></thead>
+            <tbody id="studentTableBody"></tbody>
+        </table>
+    </section>
+</body>
+</html>

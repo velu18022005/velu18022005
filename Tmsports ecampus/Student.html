@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCampus for School - Student Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #dfe4ea);
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #007bff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page Title */
+        h2 {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 123, 255, 0.4);
+        }
+
+        /* Card Styles */
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .card h4 {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .card p {
+            color: #666;
+        }
+
+        /* Buttons */
+        .btn {
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .card {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TM Sports Academy eCampus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Student.html">Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Coachs.html">Coachs</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Student Page Section -->
+    <section id="students" class="container mt-5">
+        <h2>Student Portal</h2>
+        <p class="text-center">Access your assignments, grades, and schedules here.</p>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <h4>Assignments</h4>
+                    <p>View and submit assignments online.</p>
+                    <a href="./Assingment.html"><button class="btn btn-primary">View</button></a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <h4>Grades</h4>
+                    <p>Check your latest grades and progress.</p>
+                    <a href="./Grades.html"><button class="btn btn-success">View</button></a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <h4>Achievements</h4>
+                    <p>Check your class achievements.</p>
+                    <a href="./Achivements.html"><button class="btn btn-info">View</button></a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <h4>Attendance</h4>
+                    <p>Mark your daily attendance.</p>
+                    <button class="btn btn-warning" onclick="markAttendance()">Mark Attendance</button>
+                    <p id="attendanceStatus" class="mt-2 text-success"></p>
+                    <a href="https://docs.google.com/spreadsheets/d/110NU5SG7wQ76wHUfeXoo3-0Ains9juvLBnu9yvLoCaw/edit?usp=sharing" target="_blank">
+                        <button class="btn btn-secondary mt-2">View Attendance</button>
+                    </a>
+                </div>
+            </div>
+            
+    </section>
+
+    <script>
+        function markAttendance() {
+            let now = new Date();
+            let formattedTime = now.toLocaleString();
+            document.getElementById("attendanceStatus").innerText = "Attendance marked at " + formattedTime;
+
+            // Future integration: Send attendance data to database or Google Sheets
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

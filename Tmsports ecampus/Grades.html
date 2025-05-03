@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCampus for School - Grades Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdWRFF-vx-nyf76__0o6RI7Ht2xAVvjIY",
+            authDomain: "tmsports-c2412.firebaseapp.com",
+            projectId: "tmsports-c2412",
+            storageBucket: "tmsports-c2412.appspot.com",
+            messagingSenderId: "932200744193",
+            appId: "1:932200744193:web:04aa5a7955ea93d11b0700"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function fetchGrades() {
+            const gradesContainer = document.getElementById("gradesContainer");
+            
+            onSnapshot(collection(db, "students"), (snapshot) => {
+                gradesContainer.innerHTML = ""; // Clear existing content
+                
+                snapshot.forEach((doc) => {
+                    let student = doc.data();
+                    let progress = student.progress || 0;
+                    let attendance = student.attendance || 0;
+                    
+                    let gradeCard = `
+                        <div class="col-md-6">
+                            <div class="card grade-card p-3 mb-4">
+                                <h4 class="card-title">${student.name}</h4>
+                                <p>Grade: <strong>${student.grade || 'N/A'}</strong></p>
+                                <p>Attendance: <strong>${attendance.toFixed(2)}%</strong></p>
+                                <p>Progress: <strong>${progress}%</strong></p>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: ${progress}%">${progress}%</div>
+                                </div>
+                            </div>
+                        </div>`;
+                    
+                    gradesContainer.innerHTML += gradeCard;
+                });
+            });
+        }
+
+        window.onload = fetchGrades;
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #dfe4ea);
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #007bff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 123, 255, 0.4);
+        }
+        .grade-card {
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .grade-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .progress {
+            height: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TM Sports Academy eCampus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="./index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Student.html">Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Assignment.html">Assignments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./Coaches.html">Coaches</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="grades" class="container mt-5">
+        <h2>Grades</h2>
+        <p class="text-center">Check your latest grades below.</p>
+        <div class="row" id="gradesContainer">
+            <!-- Student grades will be loaded here dynamically -->
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

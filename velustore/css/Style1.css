@@ -1,0 +1,35 @@
+body{
+    background-color: rgb(111, 17, 227);
+    color: rgb(18, 233, 68);
+    max-width:400px;
+    margin:auto;
+    padding: 10px;
+    border-style:ridge;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+form{
+    width: 25;
+    height: 28;
+    display: flex;
+    background: rgba(255,255,255,255,0.06);
+}
+.login{
+    font-size: 20px;
+}
+.whattsapp{
+    font-size: 40px;
+    border-radius: 80%;
+    background: rgb(239, 171, 11);
+}
+.linkedin{
+    font-size: 40px;
+    background: rgb(239, 171, 11);
+    border-radius: 80%;
+}
+.mail{
+    font-size: 40px;
+    background: rgb(235, 156, 9);
+    border-radius: 80%;
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silambam Tournament Admin Panel</title>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef2f7;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 0 auto;
+    box-shadow: rgba(133,189,215,0.5) 0px 10px 20px;
+}
+h2 {
+    text-align: center;
+    color: rgb(16,137,211);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table, th, td {
+    border: 1px solid #ccc;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background: rgb(16,137,211);
+    color: white;
+}
+button {
+    padding: 5px 10px;
+    background: rgb(16,137,211);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover { background: rgb(18,177,209); }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Silambam Tournament Registrations</h2>
+<table id="registrationsTable">
+    <thead>
+        <tr>
+            <th>Reg. No</th>
+            <th>Event</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Parent</th>
+            <th>Phone</th>
+            <th>School</th>
+            <th>Academy</th>
+            <th>Age</th>
+            <th>Standard</th>
+            <th>Address</th>
+            <th>Download PDF</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBgHyCDGHvq2Nw-qs3yK3qJ6BkJfGjN8yo",
+  authDomain: "silambam-tournament.firebaseapp.com",
+  databaseURL: "https://silambam-tournament-default-rtdb.firebaseio.com",
+  projectId: "silambam-tournament",
+  storageBucket: "silambam-tournament.firebasestorage.app",
+  messagingSenderId: "501808749466",
+  appId: "1:501808749466:web:671343fa1ef65b90cef823"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const tableBody = document.querySelector("#registrationsTable tbody");
+
+function generatePDF(data) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Silambam Tournament Registration", 20, 20);
+    doc.setFontSize(14);
+    doc.text(`Event: ${data.event_name}`, 20, 35);
+
+    let y = 50;
+    for (const [key, value] of Object.entries(data)) {
+        if(key.endsWith("_base64")) continue;
+        if(key === "event_name") continue;
+        doc.text(`${key.replace(/_/g," ").toUpperCase()}: ${value}`, 20, y);
+        y += 10;
+    }
+
+    let imgY = y + 10;
+    if(data.aadhar_base64.startsWith("data:image")) doc.addImage(data.aadhar_base64,"JPEG",20,imgY,50,50);
+    if(data.student_base64.startsWith("data:image")) doc.addImage(data.student_base64,"JPEG",80,imgY,50,50);
+    if(data.coach_base64.startsWith("data:image")) doc.addImage(data.coach_base64,"JPEG",140,imgY,50,50);
+
+    doc.save(`${data.registration_number}.pdf`);
+}
+
+// Fetch data from Firebase
+onValue(ref(db, 'registrations'), (snapshot) => {
+    tableBody.innerHTML = "";
+    snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${data.registration_number}</td>
+            <td>${data.event_name}</td>
+            <td>${data.name}</td>
+            <td>${data.email}</td>
+            <td>${data.parent}</td>
+            <td>${data.phone}</td>
+            <td>${data.school}</td>
+            <td>${data.academy}</td>
+            <td>${data.age}</td>
+            <td>${data.standard}</td>
+            <td>${data.address}</td>
+            <td><button class="pdfBtn">Download PDF</button></td>
+        `;
+
+        row.querySelector(".pdfBtn").addEventListener("click", () => generatePDF(data));
+
+        tableBody.appendChild(row);
+    });
+});
+</script>
+
+</body>
+</html>

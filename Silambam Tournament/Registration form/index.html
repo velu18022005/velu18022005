@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nalaiya Poluthu Silambam Tournament Registration</title>
+<link rel="icon" href="./assert/Nalaiya Poluthu logo.jpeg">
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef2f7;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 400px;
+    background: linear-gradient(0deg, #fff 0%, #f4f7fb 100%);
+    border-radius: 40px;
+    padding: 25px 35px;
+    border: 5px solid #fff;
+    box-shadow: rgba(133,189,215,0.88) 0px 30px 30px -20px;
+    margin: 20px auto;
+}
+.heading {
+    text-align: center;
+    font-weight: 900;
+    font-size: 28px;
+    color: rgb(16, 137, 211);
+}
+.form { margin-top: 20px; }
+.form .input {
+    width: 100%;
+    background: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 20px;
+    margin-top: 12px;
+    box-shadow: #cff0ff 0px 8px 8px -5px;
+    border-inline: 2px solid transparent;
+}
+.form .input::placeholder { color: rgb(170,170,170); }
+.form .input:focus { outline: none; border-inline: 2px solid #12B1D1; }
+.form .login-button {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    background: linear-gradient(45deg, rgb(16,137,211) 0%, rgb(18,177,209) 100%);
+    color: white;
+    padding-block: 15px;
+    margin: 20px auto;
+    border-radius: 20px;
+    box-shadow: rgba(133,189,215,0.88) 0px 20px 10px -15px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.form .login-button:hover { transform: scale(1.03); }
+.form .login-button:active { transform: scale(0.95); }
+label { margin-top: 10px; display: block; font-weight: bold; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img src="./assert/Nalaiya Poluthu logo.jpeg" alt="" height="50px" width="250px">
+<h2 class="heading">Nalaiya Poluthu Silambam Tournament Registration</h2>
+<form id="registrationForm" class="form">
+    <input type="text" id="event_name" class="input" placeholder="Event Name" required>
+    <input type="text" id="name" class="input" placeholder="Your Name" required>
+    <input type="email" id="email" class="input" placeholder="Your Email" required>
+    <input type="text" id="parent" class="input" placeholder="Parent's Name" required>
+    <input type="tel" id="phone" class="input" placeholder="Phone Number" required>
+    <input type="text" id="school" class="input" placeholder="School Name" required>
+    <input type="text" id="academy" class="input" placeholder="Academy Name" required>
+    <input type="number" id="age" class="input" placeholder="Age" required>
+    <input type="text" id="standard" class="input" placeholder="Standard/Class" required>
+    <textarea id="address" class="input" placeholder="Address" required></textarea>
+    <label>Aadhar Card:</label>
+    <input type="file" id="aadhar" class="input" accept="image/*,application/pdf" required>
+    <label>Student Photo:</label>
+    <input type="file" id="student" class="input" accept="image/*" required>
+    <label>Coach Photo:</label>
+    <input type="file" id="coach" class="input" accept="image/*" required>
+    <button type="submit" class="login-button">Register</button>
+</form>
+</div>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBgHyCDGHvq2Nw-qs3yK3qJ6BkJfGjN8yo",
+  authDomain: "silambam-tournament.firebaseapp.com",
+  databaseURL: "https://silambam-tournament-default-rtdb.firebaseio.com",
+  projectId: "silambam-tournament",
+  storageBucket: "silambam-tournament.firebasestorage.app",
+  messagingSenderId: "501808749466",
+  appId: "1:501808749466:web:671343fa1ef65b90cef823"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+async function generatePDF(data) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Nalaiya Poluthu Silambam Tournament Registration", 20, 20);
+    doc.setFontSize(14);
+    doc.text(`Event: ${data.event_name}`, 20, 35);
+
+    let y = 50;
+    for (const [key, value] of Object.entries(data)) {
+        if(key.endsWith("_base64")) continue; // skip images in text
+        if(key === "event_name") continue;
+        doc.text(`${key.replace(/_/g," ").toUpperCase()}: ${value}`, 20, y);
+        y += 10;
+    }
+
+    // Add images if available
+    let imgY = y + 10;
+    if(data.aadhar_base64.startsWith("data:image")) doc.addImage(data.aadhar_base64, "JPEG", 20, imgY, 50, 50);
+    if(data.student_base64.startsWith("data:image")) doc.addImage(data.student_base64, "JPEG", 80, imgY, 50, 50);
+    if(data.coach_base64.startsWith("data:image")) doc.addImage(data.coach_base64, "JPEG", 140, imgY, 50, 50);
+
+    doc.save(`${data.registration_number}.pdf`);
+}
+
+document.getElementById("registrationForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const registration_number = "TNR" + Math.floor(Math.random()*10000);
+
+    const aadhar_base64 = await fileToBase64(document.getElementById("aadhar").files[0]);
+    const student_base64 = await fileToBase64(document.getElementById("student").files[0]);
+    const coach_base64 = await fileToBase64(document.getElementById("coach").files[0]);
+
+    const data = {
+        registration_number,
+        event_name: document.getElementById("event_name").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        parent: document.getElementById("parent").value,
+        phone: document.getElementById("phone").value,
+        school: document.getElementById("school").value,
+        academy: document.getElementById("academy").value,
+        age: document.getElementById("age").value,
+        standard: document.getElementById("standard").value,
+        address: document.getElementById("address").value,
+        aadhar_base64,
+        student_base64,
+        coach_base64
+    };
+
+    await push(ref(db, 'registrations'), data);
+
+    // Generate PDF automatically
+    await generatePDF(data);
+
+    alert("Registration submitted and PDF downloaded!");
+    document.getElementById("registrationForm").reset();
+});
+</script>
+</body>
+</html>
